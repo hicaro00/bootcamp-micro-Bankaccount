@@ -1,0 +1,144 @@
+swagger: 3.0.0
+info:
+  title: Microservicio de Cuentas Bancarias
+  version: 1.0.0
+  description: API para gestionar cuentas bancarias.
+
+paths:
+  /cuentas_bancarias/{account_id}:
+    get:
+      summary: Obtener información de una cuenta bancaria
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Información detallada de la cuenta bancaria.
+
+    put:
+      summary: Actualizar información de una cuenta bancaria
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+        - name: Cuenta Bancaria
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/BankAccount"
+      responses:
+        200:
+          description: Información de la cuenta bancaria actualizada.
+
+    delete:
+      summary: Eliminar una cuenta bancaria
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: Cuenta bancaria eliminada con éxito.
+
+  /cuentas_bancarias:
+    post:
+      summary: Crear una nueva cuenta bancaria
+      parameters:
+        - name: Cuenta Bancaria
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/BankAccount"
+      responses:
+        201:
+          description: Cuenta bancaria creada con éxito.
+
+
+  /cuentas_bancarias/{account_id}/depositos:
+    post:
+      summary: Realizar un depósito en una cuenta bancaria
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+        - name: Monto
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/DepositAmount"
+      responses:
+        200:
+          description: Depósito realizado con éxito.
+
+  /cuentas_bancarias/{account_id}/retiros:
+    post:
+      summary: Realizar un retiro desde una cuenta bancaria
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+        - name: Monto
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/WithdrawalAmount"
+      responses:
+        200:
+          description: Retiro realizado con éxito.
+
+  /cuentas_bancarias/{account_id}/movimientos:
+    get:
+      summary: Consultar movimientos de una cuenta bancaria
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: stringr
+      responses:
+        200:
+          description: Lista de movimientos de la cuenta bancaria.
+
+definitions:
+  BankAccount:
+    type: object
+    properties:
+      accountId:
+        type: string
+      customerId:
+        type: string
+      accountType:
+        type: string
+      balance:
+        type: string
+      deposits:
+        type: array
+        items: 
+          $ref: "#/definitions/DepositAmount"
+      withdrawalAmounts:
+        type: array
+        items:
+          $ref: "#/definitions/WithdrawalAmount" 
+          
+  DepositAmount:
+    type: object
+    properties:
+      amount:
+        type: number
+      depositDate:
+        type: string
+
+
+  WithdrawalAmount:
+    type: object
+    properties:
+      amount:
+        type: number
+      dateWithdrawal:
+        type: string
+
