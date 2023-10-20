@@ -1,5 +1,7 @@
 package com.lizana.microservicebankaccount.domain.entity;
 
+import com.lizana.microservicebankaccount.domain.dtos.DepositAmountDto;
+import com.lizana.microservicebankaccount.domain.dtos.WithdrawalAmountDto;
 import com.lizana.microservicebankaccount.domain.objet.DepositAmount;
 import com.lizana.microservicebankaccount.domain.objet.WithdrawalAmount;
 import lombok.AllArgsConstructor;
@@ -20,7 +22,7 @@ public class BankAccount {
     private String customerId;
     private String accountType;
     private BigDecimal balance;
-    private List<DepositAmount> deposits;
-    private List<WithdrawalAmount> withdrawalAmounts;
+    private List<DepositAmountDto> deposits;
+    private List<WithdrawalAmountDto> withdrawalAmounts;
 
 }

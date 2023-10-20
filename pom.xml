@@ -73,29 +73,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.openapitools</groupId>
-				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>4.3.1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/openapi-bankAccount.yaml</inputSpec>
-							<generatorName>spring</generatorName>
-							<apiPackage>com.lizana.microservicebankaccount.model</apiPackage>
-							<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
-							<configOptions>
-								<delegatePattern>true</delegatePattern>
-								<reactive>true</reactive>
-							</configOptions>
 
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 
 	</build>
