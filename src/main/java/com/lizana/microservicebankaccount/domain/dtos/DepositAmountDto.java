@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class DepositAmountDto {
 
-        @Id
+
         private String depositoId;
         private BigDecimal amount;
         private Date depositDate;

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 @Data
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class BankAccountDto {
         private String customerId;
         private String accountType;
         private BigDecimal balance;
-        private List<DepositAmountDto> deposits;
-        private List<WithdrawalAmountDto> withdrawalAmounts;
+        private List<DepositAmountDto> deposits = new ArrayList<>();
+        private List<WithdrawalAmountDto> withdrawalAmounts = new ArrayList<>();
 
 }

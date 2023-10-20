@@ -21,7 +21,28 @@ public class TransaccionServiceImpl implements TransaccionesService {
     BankAccountRepo bankAccountRepo;
     @Override
     public Mono<BankAccountDto> depositInAccount(String accountId, DepositAmountDto depositAmountDto) {
-        return bankAccountRepo.findById(accountId)
+        Mono<BankAccount> bankAccountDtoMono = bankAccountRepo.findById(accountId);
+        return bankAccountDtoMono.flatMap(
+                existingAccount -> {
+                    //primero creamos una copia del documento recuperado monogoDb
+                    List<DepositAmountDto> updatedDepositAmounts = new ArrayList<>(existingAccount.getDeposits());
+                    // agregamos el deposito a la lista
+                    updatedDepositAmounts.add(depositAmountDto);
+                    // Actualizar la lista en el documento usando $set
+                    existingAccount.setDeposits(updatedDepositAmounts);
+
+                    System.out.println(existingAccount);
+                    // Realizar la actualización en la base de datos
+                    return bankAccountRepo.save(existingAccount)
+                            .map(AccountUtil::entityToDto);
+                }
+        );
+
+
+
+
+
+       /* return bankAccountRepo.findById(accountId)
                 .flatMap(existingAccount -> {
                     //primero creamos una copia del documento recuperado monogoDb
                     List<DepositAmountDto> updatedDepositAmounts = new ArrayList<>(existingAccount.getDeposits());
@@ -32,7 +53,7 @@ public class TransaccionServiceImpl implements TransaccionesService {
                     // Realizar la actualización en la base de datos
                     return bankAccountRepo.save(existingAccount)
                             .map(AccountUtil::entityToDto);
-                });
+                });*/
 
     }
 

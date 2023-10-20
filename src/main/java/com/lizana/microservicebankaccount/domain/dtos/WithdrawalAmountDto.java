@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class WithdrawalAmountDto {
 
-        @Id
+
         private String withdrawalId;
         private BigDecimal amount;
         private Date dateWithdrawal;
