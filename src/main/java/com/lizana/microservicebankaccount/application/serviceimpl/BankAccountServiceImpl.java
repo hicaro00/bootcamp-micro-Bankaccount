@@ -122,7 +122,7 @@ public class BankAccountServiceImpl implements BanckAccountService {
 
 
     // Realiza las operaciones necesarias y devuelve un Mono<AccountCreationRequest> en lugar de Mono<BankAccountDto>
-      return bankAccountRepo.insert(AccountUtil.dtoToEntity(newAccount))
+      return bankAccountRepo.insert(AccountUtil.dtoToEntity(newAccounte))
               .map(AccountUtil::entityToDto)
               .map(dto -> {
                 // Puedes realizar las transformaciones necesarias para actualizar el objeto AccountCreationRequest
