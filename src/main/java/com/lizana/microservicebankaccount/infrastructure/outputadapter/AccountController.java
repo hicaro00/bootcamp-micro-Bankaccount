@@ -1,6 +1,7 @@
 package com.lizana.microservicebankaccount.infrastructure.outputadapter;
 
 import com.lizana.microservicebankaccount.domain.dtos.BankAccountDto;
+import com.lizana.microservicebankaccount.domain.dtos.CustomerDto;
 import com.lizana.microservicebankaccount.infrastructure.inputport.BanckAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,10 @@ public class AccountController {
     return banckAccountService.createdBanckAccount(bankAccountDto);
 
 
+  }
+  @PostMapping("/associateaccount")
+  @ResponseBody
+  public Mono<CustomerDto> createAssociateCtaBanK (@RequestBody BankAccountDto bankAccountDto){
+    return banckAccountService.createdAndAssociateBankAccount(bankAccountDto);
   }
 }

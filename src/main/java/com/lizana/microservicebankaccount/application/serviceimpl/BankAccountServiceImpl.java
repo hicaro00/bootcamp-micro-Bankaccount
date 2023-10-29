@@ -116,16 +116,12 @@ public class BankAccountServiceImpl implements BanckAccountService {
       return Mono.error(new IllegalArgumentException("Tipo de cuenta no soportado: " + accountType));
     }
 
-    /*return bankAccountRepo.insert(AccountUtil.dtoToEntity(newAccount))
-            .map(AccountUtil::entityToDto)
-            .map(dto -> {
-              // Puedes realizar las transformaciones necesarias para actualizar el objeto AccountCreationRequest
-              return bankAccountDto;
-            });*/
+
     return bankAccountRepo.insert(AccountUtil.dtoToEntity(newAccount))
             .map(AccountUtil::entityToDto);
 
   }
+
   @Override
   public Mono<CustomerDto> createdAndAssociateBankAccount(BankAccountDto bankAccountDto) {
     return createdBanckAccount(bankAccountDto)
@@ -136,12 +132,13 @@ public class BankAccountServiceImpl implements BanckAccountService {
               bankacountsList.setAccountNumber(bankAccountDto1.getAccountNumber());
               bankacountsList.setAccountType(bankAccountDto1.getAccountType());
 
+
               CustomerDto customerDtoNew = new CustomerDto();
               customerDtoNew.setBankAccounts(Collections.singletonList(bankacountsList));
 
 
               return webClient.put()
-                      .uri("http://localhost:8085/customer/addbankaccount/{id}", bankAccountDto1.getCustomerId())
+                      .uri("http://localhost:8085/customer/updatecustomer/{id}", bankAccountDto1.getCustomerId())
                       .bodyValue(customerDtoNew)
                       .retrieve()
                       .bodyToMono(CustomerDto.class);
