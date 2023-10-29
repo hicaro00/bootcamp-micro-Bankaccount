@@ -138,7 +138,7 @@ public class BankAccountServiceImpl implements BanckAccountService {
 
 
               return webClient.put()
-                      .uri("http://localhost:8085/customer/updatecustomer/{id}", bankAccountDto1.getCustomerId())
+                      .uri("http://customer-service/customer/updatecustomer/{id}", bankAccountDto1.getCustomerId())
                       .bodyValue(customerDtoNew)
                       .retrieve()
                       .bodyToMono(CustomerDto.class);
