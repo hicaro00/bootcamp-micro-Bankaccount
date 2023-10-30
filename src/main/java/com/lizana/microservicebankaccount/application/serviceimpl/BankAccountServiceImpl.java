@@ -4,6 +4,7 @@ import com.lizana.microservicebankaccount.application.utils.AccountNumberGenerat
 import com.lizana.microservicebankaccount.domain.dtos.BankAccountDto;
 import com.lizana.microservicebankaccount.domain.dtos.BankacountsList;
 import com.lizana.microservicebankaccount.domain.dtos.CustomerDto;
+import com.lizana.microservicebankaccount.domain.dtos.Signatory;
 import com.lizana.microservicebankaccount.domain.utilsmaper.AccountUtil;
 import com.lizana.microservicebankaccount.infrastructure.inputport.BanckAccountService;
 import com.lizana.microservicebankaccount.infrastructure.outpupport.BankAccountRepo;
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -80,7 +82,7 @@ public class BankAccountServiceImpl implements BanckAccountService {
       newAccount.setAccountStatus("personal-vip");
       newAccount.setAvailableBalance(BigDecimal.ZERO);
       newAccount.setNumberTransactions(100);
-      newAccount.setSignatory(new ArrayList<>(bankAccountDto.getSignatory()));
+      newAccount.setSignatoryes(new ArrayList<>(bankAccountDto.getSignatoryes()));
     } else if ("CURRENTACCOUNT".equals(accountType)) {
       newAccount.setCustomerId(customerId);
       newAccount.setAccountType("CURRENTACCOUNT");
@@ -94,7 +96,7 @@ public class BankAccountServiceImpl implements BanckAccountService {
       newAccount.setTemporaryBlock(false);
       newAccount.setAccountStatus("empresarial-pyme"); //normal o pyme
       newAccount.setAvailableBalance(BigDecimal.ZERO);
-      newAccount.setSignatory(new ArrayList<>(bankAccountDto.getSignatory()));
+      newAccount.setSignatoryes(new ArrayList<>(bankAccountDto.getSignatoryes()));
     } else if ("FIXEDTERM".equals(accountType)) {
       newAccount.setCustomerId(customerId);
       newAccount.setAccountType("FIXEDTERM");
@@ -109,7 +111,7 @@ public class BankAccountServiceImpl implements BanckAccountService {
       newAccount.setAccountStatus("personal");
       newAccount.setAvailableBalance(BigDecimal.ZERO);
       newAccount.setNumberTransactions(2);
-      newAccount.setSignatory(new ArrayList<>(bankAccountDto.getSignatory()));
+      newAccount.setSignatoryes(new ArrayList<>(bankAccountDto.getSignatoryes()));
     } else {
       Logger logger = LoggerFactory.getLogger(getClass());
       logger.error("Tipo de cuenta no soportado: {}", accountType);
@@ -144,4 +146,54 @@ public class BankAccountServiceImpl implements BanckAccountService {
                       .bodyToMono(CustomerDto.class);
             });
   }
+
+  @Override
+  public Mono<BankAccountDto> addNewSignature(Signatory signatory, String banckAccountId) {
+
+
+    return getInfoBanckAccount(banckAccountId)
+            .flatMap(bankAccountDto1 -> {
+              // Crear una nueva Signatory basada en la existente
+              Signatory newSignatory = new Signatory();
+              newSignatory.setAddress(signatory.getAddress());
+              newSignatory.setName(signatory.getName());
+              newSignatory.setIdentifier(signatory.getIdentifier());
+              newSignatory.setCustomerId(signatory.getCustomerId());
+
+              // Actualizar la información del BankAccount en la base de datos
+              bankAccountDto1.getSignatoryes().clear();
+              bankAccountDto1.getSignatoryes().add(newSignatory);
+
+              return addputInfoBankAccount(banckAccountId,Mono.just(bankAccountDto1) )
+                      .thenReturn(bankAccountDto1); // Devolver el resultado de la actualización
+            });
+
+  }
+
+  public Mono<BankAccountDto> addputInfoBankAccount(String accountId, Mono<BankAccountDto> bankAccountDto) {
+    return bankAccountRepo.findById(accountId)
+            .flatMap(existingBankAccount -> {
+              return bankAccountDto.map(dto -> {
+                // Obtener la lista de Signatory existente en la cuenta bancaria existente
+                List<Signatory> existingSignatories = existingBankAccount.getSignatoryes();
+
+                // Agregar el nuevo Signatory a la lista de Signatory existente
+                existingSignatories.add(dto.getSignatoryes().get(0)); // Suponemos que solo se agrega un Signatory a la vez
+
+                // Actualizar cualquier otro atributo de la cuenta bancaria si es necesario
+                if (dto.getAccountType() != null) {
+                  existingBankAccount.setAccountType(dto.getAccountType());
+                }
+                if (dto.getCustomerId() != null) {
+                  existingBankAccount.setCustomerId(dto.getCustomerId());
+                }
+
+                return existingBankAccount;
+              });
+            })
+            .flatMap(updatedBankAccount -> bankAccountRepo.save(updatedBankAccount))
+            .map(AccountUtil::entityToDto);
+  }
+
+
 }

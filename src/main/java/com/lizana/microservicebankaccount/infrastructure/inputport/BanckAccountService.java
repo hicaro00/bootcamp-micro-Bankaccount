@@ -2,20 +2,22 @@ package com.lizana.microservicebankaccount.infrastructure.inputport;
 
 import com.lizana.microservicebankaccount.domain.dtos.BankAccountDto;
 import com.lizana.microservicebankaccount.domain.dtos.CustomerDto;
+import com.lizana.microservicebankaccount.domain.dtos.Signatory;
 import reactor.core.publisher.Mono;
 
 public interface BanckAccountService {
 
 
-  public Mono<BankAccountDto> getInfoBanckAccount(String accountId);
+Mono<BankAccountDto> getInfoBanckAccount(String accountId);
 
-  public Mono<BankAccountDto> putInfoBankAccount(String accountId, Mono<BankAccountDto> bankAccountDto);
+   Mono<BankAccountDto> putInfoBankAccount(String accountId, Mono<BankAccountDto> bankAccountDto);
 
-  public Mono<Void> deleteBankAccount(String accountId);
+   Mono<Void> deleteBankAccount(String accountId);
 
-  public Mono<BankAccountDto> createdBanckAccount(BankAccountDto bankAccountDto);
+   Mono<BankAccountDto> createdBanckAccount(BankAccountDto bankAccountDto);
 
-  public Mono<CustomerDto> createdAndAssociateBankAccount(BankAccountDto bankAccountDto);
+  Mono<CustomerDto> createdAndAssociateBankAccount(BankAccountDto bankAccountDto);
 
+  Mono<BankAccountDto> addNewSignature(Signatory signatory, String banckAccountId);
 
 }

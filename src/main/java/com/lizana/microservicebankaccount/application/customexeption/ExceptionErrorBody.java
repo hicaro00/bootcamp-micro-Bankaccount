@@ -1,4 +1,4 @@
-package com.lizana.microservicebankaccount.application.CustomExeption;
+package com.lizana.microservicebankaccount.application.customexeption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

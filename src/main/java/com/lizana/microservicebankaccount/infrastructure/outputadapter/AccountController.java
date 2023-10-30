@@ -2,6 +2,7 @@ package com.lizana.microservicebankaccount.infrastructure.outputadapter;
 
 import com.lizana.microservicebankaccount.domain.dtos.BankAccountDto;
 import com.lizana.microservicebankaccount.domain.dtos.CustomerDto;
+import com.lizana.microservicebankaccount.domain.dtos.Signatory;
 import com.lizana.microservicebankaccount.infrastructure.inputport.BanckAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RequestMapping("/account")
 public class AccountController {
+
 
   @Autowired
   private BanckAccountService banckAccountService;
@@ -37,9 +39,18 @@ public class AccountController {
 
 
   }
+
   @PostMapping("/associateaccount")
   @ResponseBody
-  public Mono<CustomerDto> createAssociateCtaBanK (@RequestBody BankAccountDto bankAccountDto){
+  public Mono<CustomerDto> createAssociateCtaBanK(@RequestBody BankAccountDto bankAccountDto) {
     return banckAccountService.createdAndAssociateBankAccount(bankAccountDto);
+  }
+
+  @PutMapping("/addsignatory/{accountId}")
+  @ResponseBody
+  public Mono<BankAccountDto> addSignature(@RequestBody Signatory signatory, @PathVariable(name = "accountId") String accountId) {
+    Mono<BankAccountDto> add = banckAccountService.addNewSignature(signatory, accountId);
+    return ResponseEntity.status(HttpStatus.OK).body(add).getBody();
+
   }
 }
