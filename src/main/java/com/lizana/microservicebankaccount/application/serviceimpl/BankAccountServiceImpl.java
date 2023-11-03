@@ -8,6 +8,10 @@ import com.lizana.microservicebankaccount.domain.dtos.Signatory;
 import com.lizana.microservicebankaccount.domain.utilsmaper.AccountUtil;
 import com.lizana.microservicebankaccount.infrastructure.inputport.BanckAccountService;
 import com.lizana.microservicebankaccount.infrastructure.outpupport.BankAccountRepo;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,12 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -65,7 +63,7 @@ public class BankAccountServiceImpl implements BanckAccountService {
 
 
     String customerId = bankAccountDto.getCustomerId();
-    String accountType = bankAccountDto.getAccountType(); // Obtener el tipo de cuenta desde accountCreationRequest
+    String accountType = bankAccountDto.getAccountType();
     BankAccountDto newAccount = new BankAccountDto();
 
     if ("SAVINGS".equals(accountType)) {
@@ -82,7 +80,7 @@ public class BankAccountServiceImpl implements BanckAccountService {
       newAccount.setAccountStatus("personal-vip");
       newAccount.setAvailableBalance(BigDecimal.ZERO);
       newAccount.setNumberTransactions(100);
-      newAccount.setSignatoryes(new ArrayList<>(bankAccountDto.getSignatoryes()));
+
     } else if ("CURRENTACCOUNT".equals(accountType)) {
       newAccount.setCustomerId(customerId);
       newAccount.setAccountType("CURRENTACCOUNT");
@@ -96,7 +94,7 @@ public class BankAccountServiceImpl implements BanckAccountService {
       newAccount.setTemporaryBlock(false);
       newAccount.setAccountStatus("empresarial-pyme"); //normal o pyme
       newAccount.setAvailableBalance(BigDecimal.ZERO);
-      newAccount.setSignatoryes(new ArrayList<>(bankAccountDto.getSignatoryes()));
+
     } else if ("FIXEDTERM".equals(accountType)) {
       newAccount.setCustomerId(customerId);
       newAccount.setAccountType("FIXEDTERM");
@@ -111,7 +109,7 @@ public class BankAccountServiceImpl implements BanckAccountService {
       newAccount.setAccountStatus("personal");
       newAccount.setAvailableBalance(BigDecimal.ZERO);
       newAccount.setNumberTransactions(2);
-      newAccount.setSignatoryes(new ArrayList<>(bankAccountDto.getSignatoryes()));
+
     } else {
       Logger logger = LoggerFactory.getLogger(getClass());
       logger.error("Tipo de cuenta no soportado: {}", accountType);
@@ -140,7 +138,7 @@ public class BankAccountServiceImpl implements BanckAccountService {
 
 
               return webClient.put()
-                      .uri("http://customer-service/customer/updatecustomer/{id}", bankAccountDto1.getCustomerId())
+                      .uri("http://localhost:8080/customer/updatecustomer/{id}", bankAccountDto1.getCustomerId())
                       .bodyValue(customerDtoNew)
                       .retrieve()
                       .bodyToMono(CustomerDto.class);

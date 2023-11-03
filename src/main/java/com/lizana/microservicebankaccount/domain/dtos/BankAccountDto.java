@@ -1,16 +1,14 @@
 package com.lizana.microservicebankaccount.domain.dtos;
 
 
-import com.lizana.microservicebankaccount.application.customexeption.ExceptionErrorBody;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -18,10 +16,9 @@ import java.util.List;
 public class BankAccountDto {
 
 
-  private String accountId;
+  private String accountNumber; //numeor de la cuenta
   private String customerId;
   private String accountType;  // ahorro //cuenta corriente // plazo fijo
-  private String accountNumber; //numeor de la cuenta
   private BigDecimal balance;  // saldo de la cuenta
   private int monthlyMovementLimit; //limite de movimientos mensuales
   private double maintenanceFee; //tarifa de mantenimiento
@@ -40,7 +37,7 @@ public class BankAccountDto {
   private List<String> bankReferences = new ArrayList<>();//"loan_account",  "credit_card" referencia a otros productos asociados a la cuenta
 
 
-  private ExceptionErrorBody errorBody;
+
 
 
 }

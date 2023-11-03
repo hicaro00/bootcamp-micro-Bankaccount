@@ -9,10 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Signatory {
 
-    private String customerId;
     private String name;
     private String address;
     private String identifier;
+    private String customerId;
+
 
 
 

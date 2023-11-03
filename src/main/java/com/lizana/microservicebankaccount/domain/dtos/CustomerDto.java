@@ -27,11 +27,11 @@ public class CustomerDto {
     private String dateOfBirth; //fecha de nacimiento
     private List<BankacountsList> bankAccounts = new ArrayList<>(); //lista de cuetnas bancarias asociadas al cliente
     private List<String> creditCards = new ArrayList<>(); // lista de tarjetas de credito asociadas al clietne
-    private List<String> loans = new ArrayList<>(); // lista de creditos asociados al cliente
+    private List<ExistingCredits> loans = new ArrayList<>(); // lista de creditos asociados al cliente
     private List<AddressDto> addresses = new ArrayList<>(); //lista de direcciones asociadas al cliente
     private List<EmergencyContactDto> emergencyContacts = new ArrayList<>(); //lista de contactos de emergencia del cliente
 
-    public void addBankAccount(BankacountsList account) {
-        bankAccounts.add(account);
-    }
+
+
+
 }

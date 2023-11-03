@@ -21,10 +21,9 @@ import java.util.List;
 @Document(collection = "bankAccount")
 public class BankAccount {
   @Id
-  private String accountId;
+  private String accountNumber; //numeor de la cuenta
   private String customerId;
   private String accountType;  // ahorro //cuenta corriente // plazo fijo
-  private String accountNumber; //numeor de la cuenta
   private BigDecimal balance;  // saldo de la cuenta
   private int monthlyMovementLimit; //limite de movimientos mensuales
   private double maintenanceFee; //tarifa de mantenimiento
