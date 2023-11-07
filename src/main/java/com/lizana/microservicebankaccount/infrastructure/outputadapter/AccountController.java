@@ -20,10 +20,9 @@ public class AccountController {
   @Autowired
   private BanckAccountService banckAccountService;
 
-  @GetMapping
+  @GetMapping("/info/{id}")
   @ResponseBody
-  public Mono<BankAccountDto> cuentasBancariasAccountIdGet
-          (@RequestParam String accountId) {
+  public Mono<BankAccountDto> cuentasBancariasAccountIdGet (@PathVariable (name = "id") String accountId) {
     Mono<BankAccountDto> bankAccount = banckAccountService.getInfoBanckAccount(accountId);
 
     return ResponseEntity.status(HttpStatus.GONE).body(bankAccount).getBody();

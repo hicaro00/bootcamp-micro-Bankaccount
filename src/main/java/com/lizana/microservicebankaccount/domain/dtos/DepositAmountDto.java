@@ -1,20 +1,19 @@
 package com.lizana.microservicebankaccount.domain.dtos;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-
-import java.math.BigDecimal;
-import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DepositAmountDto {
 
 
-        private String depositoId;
+        private String movementId;
         private BigDecimal amount;
-        private Date depositDate;
-
+        private String originMovement;
+        private LocalDate dateOfMovement;
+        private String authorizationCode;
 }
