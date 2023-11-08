@@ -22,9 +22,9 @@ public class MovementsController {
     @Autowired
     private TransaccionesService transaccionesService;
 
-    @PostMapping
+    @PostMapping("/deposit")
     @ResponseBody
-    public Mono<ResponseEntity<BankAccountDto>> cuentasBancariasAccountIdDepositosPost
+    public Mono<ResponseEntity<BankAccountDto>> transferdeposit
             (@RequestBody MovementDto movementDto) {
 
         return transaccionesService.depositInAccount(movementDto)

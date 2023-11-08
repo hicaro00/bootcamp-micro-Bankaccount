@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -27,6 +28,8 @@ public class BankAccountServiceImpl implements BanckAccountService {
   private BankAccountRepo bankAccountRepo;
   @Autowired
   private WebClient webClient;
+  @Value("${URI_CUSTOMER_UPDATE}")
+  String URI_CUSTOMER_UPDATE;
 
   @Override
   public Mono<BankAccountDto> getInfoBanckAccount(String accountId) {
@@ -131,6 +134,7 @@ public class BankAccountServiceImpl implements BanckAccountService {
               bankacountsList.setBalance(String.valueOf(bankAccountDto1.getBalance()));
               bankacountsList.setAccountNumber(bankAccountDto1.getAccountNumber());
               bankacountsList.setAccountType(bankAccountDto1.getAccountType());
+              bankacountsList.setAccountNumber(bankAccountDto1.getAccountNumber());
 
 
               CustomerDto customerDtoNew = new CustomerDto();
@@ -138,7 +142,7 @@ public class BankAccountServiceImpl implements BanckAccountService {
 
 
               return webClient.put()
-                      .uri("http://localhost:8080/customer/updatecustomer/{id}", bankAccountDto1.getCustomerId())
+                      .uri(URI_CUSTOMER_UPDATE, bankAccountDto1.getCustomerId())
                       .bodyValue(customerDtoNew)
                       .retrieve()
                       .bodyToMono(CustomerDto.class);

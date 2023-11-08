@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 public interface TransaccionesService {
 
     public Mono<BankAccountDto> depositInAccount(MovementDto movementDto);
-    public Mono<BankAccountDto> WithdrawalAccount(String accountId,
+    public Mono<BankAccountDto> withdrawalAccount(String accountId,
                                                   WithdrawalAmountDto withdrawalAmountDto);
     public Mono<List<DepositAmountDto>> movementsAccount(String accountId);
 }

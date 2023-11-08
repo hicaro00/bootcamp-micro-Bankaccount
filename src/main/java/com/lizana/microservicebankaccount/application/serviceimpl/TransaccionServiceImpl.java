@@ -8,6 +8,7 @@ import com.lizana.microservicebankaccount.domain.entity.BankAccount;
 import com.lizana.microservicebankaccount.domain.utilsmaper.AccountUtil;
 import com.lizana.microservicebankaccount.infrastructure.inputport.TransaccionesService;
 import com.lizana.microservicebankaccount.infrastructure.outpupport.BankAccountRepo;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,8 +27,10 @@ public class TransaccionServiceImpl implements TransaccionesService {
         bankAccountRepo.findById(movementDto.getDestinationMovement());
     return bankAccountDtoMono.flatMap(
         existingAccount -> {
+          BigDecimal newAmount = existingAccount.getBalance().add(movementDto.getAmount());
+
           //primero creamos una copia del documento recuperado monogoDb
-          List<DepositAmountDto> updatedDepositAmounts =
+          List<DepositAmountDto> updatedListDeposit =
               new ArrayList<>(existingAccount.getDeposits());
           // agregamos el deposito a la lista
           DepositAmountDto depositAmountDto = new DepositAmountDto();
@@ -37,11 +40,11 @@ public class TransaccionServiceImpl implements TransaccionesService {
           depositAmountDto.setAuthorizationCode(movementDto.getAuthorizationCode());
           depositAmountDto.setDateOfMovement(movementDto.getDateOfMovement());
 
-          updatedDepositAmounts.add(depositAmountDto);
+          updatedListDeposit.add(depositAmountDto);
           // Actualizar la lista en el documento usando $set
-          existingAccount.setDeposits(updatedDepositAmounts);
+          existingAccount.setDeposits(updatedListDeposit);
+          existingAccount.setBalance(newAmount);
 
-          System.out.println(existingAccount);
           // Realizar la actualización en la base de datos
           return bankAccountRepo.save(existingAccount)
               .map(AccountUtil::entityToDto);
@@ -49,26 +52,10 @@ public class TransaccionServiceImpl implements TransaccionesService {
     );
 
 
-
-
-
-       /* return bankAccountRepo.findById(accountId)
-                .flatMap(existingAccount -> {
-                    //primero creamos una copia del documento recuperado monogoDb
-                    List<DepositAmountDto> updatedDepositAmounts = new ArrayList<>(existingAccount.getDeposits());
-                    // agregamos el deposito a la lista
-                    updatedDepositAmounts.add(depositAmountDto);
-                    // Actualizar la lista en el documento usando $set
-                    existingAccount.setDeposits(updatedDepositAmounts);
-                    // Realizar la actualización en la base de datos
-                    return bankAccountRepo.save(existingAccount)
-                            .map(AccountUtil::entityToDto);
-                });*/
-
   }
 
   @Override
-  public Mono<BankAccountDto> WithdrawalAccount(String accountId,
+  public Mono<BankAccountDto> withdrawalAccount(String accountId,
                                                 WithdrawalAmountDto withdrawalAmountDto) {
     return bankAccountRepo.findById(accountId).flatMap(cuentaExistente -> {
       List<WithdrawalAmountDto> withdrawalAmountDtos =
